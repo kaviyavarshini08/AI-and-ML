@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Charging Load Predictor</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 2em;
+            background: linear-gradient(135deg, #1f2833, #0d0d1a);
+            color: #c5c6c7;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 2.5em;
+            background-color: #1a1a2e;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        h1 {
+            text-align: center;
+            color: #66fcf1;
+            margin-bottom: 0.5em;
+            text-shadow: 0 0 10px #66fcf1;
+        }
+
+        p {
+            text-align: center;
+            color: #45a29e;
+            margin-bottom: 2em;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5em;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 0.5em;
+            font-weight: 600;
+            color: #c5c6c7;
+        }
+
+        input[type="number"], input[type="datetime-local"] {
+            width: 100%;
+            padding: 0.8em;
+            border: 1px solid #45a29e;
+            border-radius: 6px;
+            background-color: #2b3a50;
+            color: #ffffff;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        input[type="number"]:focus, input[type="datetime-local"]:focus {
+            border-color: #66fcf1;
+            box-shadow: 0 0 8px rgba(102, 252, 241, 0.5);
+            outline: none;
+        }
+
+        button {
+            grid-column: 1 / -1;
+            margin-top: 2em;
+            padding: 1em;
+            background-color: #66fcf1;
+            color: #0d0d1a;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a29e;
+            color: #ffffff;
+        }
+
+        #result {
+            margin-top: 2em;
+            padding: 1.5em;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            transition: all 0.5s;
+        }
+
+        .success {
+            background-color: rgba(102, 252, 241, 0.2);
+            color: #66fcf1;
+            border: 1px solid #66fcf1;
+        }
+
+        .error {
+            background-color: rgba(255, 99, 71, 0.2);
+            color: #ff6347;
+            border: 1px solid #ff6347;
+        }
+
+        .loading {
+            background-color: rgba(189, 195, 199, 0.2);
+            color: #bdc3c7;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>EV Charging Load Prediction</h1>
+        <p>Enter the data below to get a real-time energy load forecast.</p>
+
+        <form id="predictionForm">
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="Date_Time">Date and Time:</label>
+                    <input type="datetime-local" id="Date_Time" name="Date_Time" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="Solar_Power_kW">Solar Power (kW):</label>
+                    <input type="number" step="any" id="Solar_Power_kW" name="Solar_Power_kW" value="18.72">
+                </div>
+                <div class="form-field">
+                    <label for="Solar_Irradiance_Wm2">Solar Irradiance (Wm2):</label>
+                    <input type="number" step="any" id="Solar_Irradiance_Wm2" name="Solar_Irradiance_Wm2" value="266.62">
+                </div>
+                <div class="form-field">
+                    <label for="Battery_SOC_%">Battery SOC (%):</label>
+                    <input type="number" step="any" id="Battery_SOC_%" name="Battery_SOC_%" value="33.55">
+                </div>
+                <div class="form-field">
+                    <label for="Num_EVs_Charging">Number of EVs Charging:</label>
+                    <input type="number" step="1" id="Num_EVs_Charging" name="Num_EVs_Charging" value="2">
+                </div>
+                <div class="form-field">
+                    <label for="Charging_Duration_Min">Charging Duration (min):</label>
+                    <input type="number" step="any" id="Charging_Duration_Min" name="Charging_Duration_Min" value="68">
+                </div>
+                <div class="form-field">
+                    <label for="Arrival_Time_Hour">Arrival Time (Hour):</label>
+                    <input type="number" step="1" id="Arrival_Time_Hour" name="Arrival_Time_Hour" value="17">
+                </div>
+                <div class="form-field">
+                    <label for="Departure_Time_Hour">Departure Time (Hour):</label>
+                    <input type="number" step="1" id="Departure_Time_Hour" name="Departure_Time_Hour" value="19">
+                </div>
+                <div class="form-field">
+                    <label for="Initial_Battery_SOC_%">Initial Battery SOC (%):</label>
+                    <input type="number" step="any" id="Initial_Battery_SOC_%" name="Initial_Battery_SOC_%" value="10.11">
+                </div>
+                <div class="form-field">
+                    <label for="Final_Battery_SOC_%">Final Battery SOC (%):</label>
+                    <input type="number" step="any" id="Final_Battery_SOC_%" name="Final_Battery_SOC_%" value="18.61">
+                </div>
+                <div class="form-field">
+                    <label for="Grid_Energy_Supply_kW">Grid Energy Supply (kW):</label>
+                    <input type="number" step="any" id="Grid_Energy_Supply_kW" name="Grid_Energy_Supply_kW" value="76.89">
+                </div>
+                <div class="form-field">
+                    <label for="Residential_Load_kW">Residential Load (kW):</label>
+                    <input type="number" step="any" id="Residential_Load_kW" name="Residential_Load_kW" value="25.53">
+                </div>
+                <div class="form-field">
+                    <label for="Business_Load_kW">Business Load (kW):</label>
+                    <input type="number" step="any" id="Business_Load_kW" name="Business_Load_kW" value="20.10">
+                </div>
+                <div class="form-field">
+                    <label for="Peak_Load_Time_Hour">Peak Load Time (Hour):</label>
+                    <input type="number" step="1" id="Peak_Load_Time_Hour" name="Peak_Load_Time_Hour" value="21">
+                </div>
+                <div class="form-field">
+                    <label for="Energy_Cost_$/kWh">Energy Cost ($/kWh):</label>
+                    <input type="number" step="any" id="Energy_Cost_$/kWh" name="Energy_Cost_$/kWh" value="0.41">
+                </div>
+                <div class="form-field">
+                    <label for="Demand_Response">Demand Response (0 or 1):</label>
+                    <input type="number" step="1" id="Demand_Response" name="Demand_Response" value="0">
+                </div>
+                <div class="form-field">
+                    <label for="Total_Demand_kW">Total Demand (kW):</label>
+                    <input type="number" step="any" id="Total_Demand_kW" name="Total_Demand_kW" value="78.93">
+                </div>
+                <div class="form-field">
+                    <label for="Available_Energy_kW">Available Energy (kW):</label>
+                    <input type="number" step="any" id="Available_Energy_kW" name="Available_Energy_kW" value="16.69">
+                </div>
+                <div class="form-field">
+                    <label for="Charging_Mode_slow">Charging Mode Slow (0 or 1):</label>
+                    <input type="number" step="1" id="Charging_Mode_slow" name="Charging_Mode_slow" value="1">
+                </div>
+                <div class="form-field">
+                    <label for="load_lag_1">Previous Load (kWh):</label>
+                    <input type="number" step="any" id="load_lag_1" name="load_lag_1" value="15.0">
+                </div>
+                <div class="form-field">
+                    <label for="load_lag_24">Load 24 Hours Ago (kWh):</label>
+                    <input type="number" step="any" id="load_lag_24" name="load_lag_24" value="20.0">
+                </div>
+            </div>
+            <button type="submit">Get Prediction</button>
+        </form>
+        <div id="result"></div>
+        <div class="chart-container" style="position: relative; height:400px; width:100%; margin-top: 2em;">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const data = {};
+            for (let i = 0; i < form.elements.length; i++) {
+                const element = form.elements[i];
+                if (element.name && element.value !== "") {
+                    data[element.name] = parseFloat(element.value);
+                }
+            }
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = 'loading';
+            resultDiv.innerText = 'Predicting...';
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+
+                if (response.ok) {
+                    resultDiv.className = 'success';
+                    resultDiv.innerText = `Forecasted EV Load: ${result.forecasted_ev_charging_load_kWh.toFixed(2)} kWh`;
+                    
+                    // Update the chart with the new prediction
+                    updateChart(result.forecasted_ev_charging_load_kWh);
+                    
+                } else {
+                    resultDiv.className = 'error';
+                    resultDiv.innerText = `Error from API: ${result.error || 'Unknown error'}`;
+                }
+
+            } catch (error) {
+                resultDiv.className = 'error';
+                resultDiv.innerText = `Error: ${error.message}.`;
+            }
+        });
+
+        // Initialize the chart
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Prediction'],
+                datasets: [{
+                    label: 'Forecasted EV Load (kWh)',
+                    data: [0], // Initial value
+                    backgroundColor: 'rgba(102, 252, 241, 0.2)',
+                    borderColor: '#66fcf1',
+                    borderWidth: 2,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'EV Load (kWh)',
+                            color: '#c5c6c7'
+                        },
+                        grid: {
+                            color: 'rgba(197, 198, 199, 0.1)'
+                        },
+                        ticks: {
+                            color: '#c5c6c7'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(197, 198, 199, 0.1)'
+                        },
+                        ticks: {
+                            color: '#c5c6c7'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#c5c6c7'
+                        }
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        function updateChart(prediction) {
+            myChart.data.datasets[0].data[0] = prediction;
+            myChart.update();
+        }
+    </script>
+</body>
+</html>
