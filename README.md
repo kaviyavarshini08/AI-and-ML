@@ -1,11 +1,103 @@
-🔋 Forecasting EV Charging Load: A Machine Learning Approach to Smart Energy ManagementOverviewThis project implements a machine learning and optimization solution for managing Electric Vehicle (EV) charging powered by Solar Photovoltaic (PV) energy within a microgrid.The solution utilizes predictive modeling to forecast key energy metrics, enabling the creation of optimal charging schedules. The main objectives are to maximize the use of locally generated renewable energy (solar PV) and significantly reduce grid energy costs and strain.Project ContextThe integration of rapidly growing EV fleets with intermittent renewable sources like solar PV poses significant grid management challenges. This project addresses the critical need for smart energy management by providing predictive intelligence to balance supply (PV generation) and highly variable demand (EV charging load).💡 Core FeaturesFeatureDescriptionData Analysis & ModelingComprehensive data exploration, feature engineering, and implementation of the XGBoost Regressor model for high-accuracy load forecasting. All analysis is detailed in the Jupyter Notebook.Energy ForecastingPredictions for essential metrics, including: Solar Power, EV Charging Demand, and Total Load on the microgrid.Optimization FrameworkThe model outputs are designed to inform optimization strategies, such as predicting the Optimal_Charging_Decision to regulate demand based on real-time energy costs and grid constraints.Interactive Web ApplicationA Flask API (app.py) serves a simple HTML frontend (index.html) that allows users to input current grid parameters and receive a real-time forecasted EV load.ReproducibilityFull dataset, cleaned data, and the trained model are provided for transparent and reproducible results.💻 Technical StackCategoryTools & LibrariesLanguagePython 3.7+Data Sciencepandas, numpy, scikit-learn, XGBoostVisualizationmatplotlib, seaborn (used within the notebook)DeploymentFlask (for the web API), joblib (for model serialization)DocumentationJupyter Notebook (MLProject.ipynb)🚀 Getting StartedFollow these steps to clone the repository and run the project on your local machine.1. PrerequisitesYou must have Git and Python 3.7+ installed. Using Anaconda or Miniconda is recommended for environment management.2. Cloning the RepositoryOpen your command prompt or terminal and clone the project:Bashgit clone https://github.com/kaviyavarshini08/AI-and-ML
-cd AI-and-ML
-3. InstallationIt is best practice to create and activate a virtual environment before installing libraries:Bash# Create and activate a virtual environment
-python -m venv ev_ml_env
-source ev_ml_env/Scripts/activate  # Use 'source ev_ml_env/bin/activate' on Linux/Mac
+# 🔋 Forecasting EV Charging Load: A Machine Learning Approach to Smart Energy Management
 
-# Install all necessary packages
+## Overview
+
+This project implements a machine learning and optimization solution for managing **Electric Vehicle (EV) charging** powered by **Solar Photovoltaic (PV) energy** within a microgrid. The primary goal is to leverage predictive analytics to create optimal charging schedules, thereby **maximizing renewable energy utilization** and **reducing overall grid costs** and strain.
+
+### Project Context
+
+Our solution utilizes time-series forecasting and classification models to predict key metrics and inform a sophisticated optimization framework for smart energy dispatch.
+
+-----
+
+## 💡 Core Features
+
+| Feature | Description |
+| :--- | :--- |
+| **Primary Analysis Tool** | All data exploration, model training, and evaluation (using **XGBoost Regressor**) are executed and documented within the **`MLProject.ipynb` Jupyter Notebook**. |
+| **Energy Forecasting** | Implements predictive models for essential metrics, including **Solar Power Generation** and **EV Charging Demand**. |
+| **Charging Optimization** | The model outputs inform the **`Optimal_Charging_Decision`**, allowing the system to intelligently regulate demand based on energy costs and grid constraints. |
+| **Interactive Web Application** | A **Flask API** (`app.py`) serves a user-friendly **HTML/CSS frontend** (`index.html`), enabling real-time input of parameters and visualization of the forecasted EV load. |
+
+-----
+
+## 💻 Technical Stack
+
+| Category | Tools & Libraries |
+| :--- | :--- |
+| **Language** | Python 3.7+ |
+| **Data Science** | pandas, numpy, scikit-learn |
+| **Machine Learning** | **XGBoost** (Primary Model) |
+| **Deployment** | **Flask** (for the web API), joblib (for model serialization) |
+| **Environment** | **Jupyter Notebook** |
+
+-----
+
+## 🛠️ Getting Started
+
+Follow these steps to clone the repository and run the project on your local machine.
+
+### 1\. Prerequisites
+
+Ensure you have **Git**, **Python 3.7+**, and **Jupyter Notebook** installed.
+
+### 2\. Cloning the Repository
+
+Open your terminal or command prompt and clone the project:
+
+```bash
+git clone https://github.com/kaviyavarshini08/AI-and-ML
+cd AI-and-ML
+```
+
+### 3\. Installation
+
+Install all required packages using pip:
+
+```bash
 pip install pandas matplotlib scikit-learn xgboost joblib flask
-⚙️ Usage InstructionsThe project runs in two phases: Analysis (in Jupyter) and Application (the Flask web app).Phase 1: Running the Analysis NotebookThis step allows you to review the data, see the model training, and generate the necessary model file (xgb_best_model.pkl).Launch Jupyter Notebook:Bashjupyter notebook
-Open the Notebook: In the browser that opens, click on MLProject.ipynb.Execute Cells: Run all cells in the notebook sequentially. This will:Load and preprocess the PV_EV_Charging_Dataset.csv.Train the XGBoost Regressor model.Evaluate its performance.Save the final, trained model as xgb_best_model.pkl.Phase 2: Running the Web Application FrontendThis step launches the interactive demonstration where you can input parameters and receive a prediction from your trained model.Stop Jupyter: Return to the terminal and press Ctrl + C twice to shut down the Jupyter server.Start the Flask Server:Bashpython app.py
-Access the App: The terminal will display a running address (e.g., http://127.0.0.1:5000/). Open this link in your web browser.Test Prediction: Interact with the form to input features like Solar_Power_kW, Battery_SOC_%, Energy_Cost_$/kWh, etc., and click the predict button to see the forecasted EV load visualized on the chart.📁 Repository ContentsFile NameDescriptionMLProject.ipynbThe main analysis file. Contains the entire workflow from data loading to model evaluation and saving.app.pyFlask Application API. Loads the saved model (xgb_best_model.pkl) and handles the prediction logic for the frontend.index.htmlFrontend UI. The HTML/CSS/JS page for user input and visualizing the predicted EV load.PV_EV_CHARGING PPT.pptxThe official project presentation slide deck.xgb_best_model.pklThe trained XGBoost model serialized and ready for deployment.PV_EV_Charging_Dataset.csvThe raw dataset containing all microgrid and EV charging data points.PV_EV_Charging_Cleaned.csvA cleaned version of the dataset used for model training.🤝 Contributing & 📄 LicenseContributingContributions are welcome! Please feel free to open an issue for bug reports or submit a pull request for feature enhancements or model improvements.License(Please specify your project's license here, e.g., MIT License)Specify your license here (e.g., MIT License).
+```
+
+-----
+
+## 🚀 Usage Instructions
+
+The project runs in two main phases: reviewing the analysis and demonstrating the application.
+
+### Phase 1: Running the Analysis Notebook (`MLProject.ipynb`)
+
+1.  **Launch Jupyter Notebook:** Ensure you are in the project directory.
+    ```bash
+    jupyter notebook
+    ```
+2.  **Open the File:** Click on **`MLProject.ipynb`** in the browser window.
+3.  **Execute Cells:** Run all cells to see the data processing, model training, and generate the saved model file (**`xgb_best_model.pkl`**).
+
+### Phase 2: Running the Web Application Frontend
+
+1.  **Start the Flask Server:** (After stopping the Jupyter process using **Ctrl + C**):
+    ```bash
+    python app.py
+    ```
+2.  **Access the Application:** Open your web browser and navigate to the address shown in the terminal (e.g., `http://127.0.0.1:5000/`).
+3.  **Test Prediction:** Interact with the form to see the real-time forecasted EV load.
+
+-----
+
+## 📁 Repository Contents
+
+| File Name | Description |
+| :--- | :--- |
+| **`MLProject.ipynb`** | **The core analysis and training file (Jupyter Notebook).** |
+| **`PV_EV_CHARGING PPT.pptx`** | The official project presentation slide deck. |
+| `app.py` | The Flask API file that handles prediction logic and serves the frontend. |
+| `index.html` | The Frontend user interface for the interactive prediction tool. |
+| `xgb_best_model.pkl` | The trained XGBoost model saved and used by `app.py`. |
+| `PV_EV_Charging_Dataset.csv` | The raw, detailed dataset used for the project. |
+
+-----
+
+## 🤝 Contributing
+
+Contributions are welcome\! Please open issues or submit pull requests.
+
